@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  app:
+    image: seglh/appauth
+    build:
+      dockerfile: Dockerfile
+      context: "."
+    depends_on:
+      - mongodb
+      - mailtrap
+    ports:
+      - "5555:5555"
+    environment:
+      NODE_ENV: production
+      HTTP_FORWARDED_COUNT: 1
+      APP_PORT: 5555
+      ROOT_URL: http://127.0.0.1:5555/appauth/
+      MAILER_URL: smtp://mailtrap:25
+      MAILER_FROM: dbrawand@nhs.net
+      SECRET_KEY: verysecretjwtauthkey
+      TOKEN_VALIDITY: "12h"
+      ALLOWED_DOMAINS: "nhs.net,kcl.ac.uk,gstt.nhs.uk,rbht.nhs.uk,viapath.org"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+  mailtrap:
+    image: "eaudeweb/mailtrap"
+    ports:
+      - "1080:80"
+    environment:
+      MT_USER: mailtrap
+      MT_PASSWD: mailtrap

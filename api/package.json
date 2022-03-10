@@ -1,0 +1,26 @@
+{
+  "name": "appauth",
+  "version": "1.0.0",
+  "description": "Simple JWT issuer based on validated emails",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node index.js",
+    "start": "nodemon index"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.5.1",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.3",
+    "graphql": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.5.11",
+    "nodemailer": "^6.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
