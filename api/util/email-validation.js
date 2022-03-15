@@ -14,6 +14,8 @@ const createMailer = (url) => {
       port: smtp.port,
       secure: false,
       tls: {
+        maxVersion: 'TLSv1.3',
+        minVersion: 'TLSv1',
         rejectUnauthorized: false
       }
     });
