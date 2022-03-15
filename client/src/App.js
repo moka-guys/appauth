@@ -15,14 +15,15 @@ import Admin from './pages/Admin';
 import Approve from './pages/Approve';
 
 function App() {
+  const basename = process.env.PUBLIC_URL || "/appauth";
   const api_regex = /^\/scidb\/api\/.*/
-   // if using "/api/" in the pathname, don't use React Router
-   if (api_regex.test(window.location.pathname)) {
-      return <div /> // must return at least an empty div
-   } else {
+  // if using "/api/" in the pathname, don't use React Router
+  if (api_regex.test(window.location.pathname)) {
+    return <div /> // must return at least an empty div
+  } else {
     return (
       <AuthProvider>
-        <Router basename={process.env.PUBLIC_URL}>
+        <Router basename={basename}>
           <Container>
             <MenuBar />
             <Switch>
