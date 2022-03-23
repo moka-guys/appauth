@@ -10,7 +10,7 @@ import {
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 
-const uri = process.env.NODE_ENV === 'development' ? 'http://localhost:5005/appauth/api' : '/appauth/api';
+const uri = process.env.NODE_ENV === 'development' ? 'http://localhost:5050/appauth/api' : '/appauth/api';
 console.log(`Configured API URI: ${uri}`);
 const httpLink = new HttpLink({ uri });
 
