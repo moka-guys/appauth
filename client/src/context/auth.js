@@ -56,7 +56,7 @@ function AuthProvider(props) {
     // remove from local storage
     localStorage.removeItem(COOKIE);
     // remove cookie
-    cookies.remove(COOKIE)
+    cookies.remove(COOKIE, { path: '/' });
     // dispatch
     dispatch({ type: 'LOGOUT' });
   }

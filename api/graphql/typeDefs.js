@@ -24,8 +24,8 @@ module.exports = gql`
   type Mutation {
     # login user with token
     login(token: String!): User!
-    # email a login token to the user
-    requestLogin(email: String!): Boolean!
+    # email a login token to the user (optionally assign a redirect url)
+    requestLogin(email: String!, redirect: String): Boolean!
     # approve a user (dont return token for user)
     approveUser(token: String!): User
   }

@@ -43,7 +43,8 @@ mongoose
     return app.listen({ port: APP_PORT });
   })
   .then((res) => {
-    console.log(`Server running at ${server.graphqlPath}...`);
+    console.log(`Server running at ${ROOT_URL} (${APP_PORT})...`);
+    console.log(`API at ${server.graphqlPath}...`);
   })
   .catch(err => {
     console.error(err)

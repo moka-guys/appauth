@@ -7,6 +7,7 @@ import { useForm } from '../util/hooks';
 function Login({history,location}) {
   const context = useContext(AuthContext);
   const [errors, setErrors] = useState({});
+  const [redirect, setRedirect] = useState();
   const { onChange, onSubmit, values } = useForm(requestLoginCallback, { email: '' });
 
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
@@ -30,13 +31,19 @@ function Login({history,location}) {
     onError(err) {
       setErrors({ email: err.graphQLErrors[0].message });
     },
-    variables: values
+    variables: {
+      redirect,
+      ...values
+    }
   });
 
   useEffect(() => {
     if (location.search) {
-      const token = new URLSearchParams(location.search).get('token')
+      const search_params = new URLSearchParams(location.search)
+      const token = search_params.get('token')
+      const return_url = search_params.get('return_url')
       if (token) loginUser({ variables: { token } });
+      if (return_url) setRedirect(return_url);
     }
   }, [location.search]);
 
@@ -92,8 +99,8 @@ const LOGIN_USER = gql`
 `;
 
 const EMAIL_LOGIN = gql`
-  mutation requestLogin($email: String!) {
-    requestLogin(email: $email) 
+  mutation requestLogin($email: String!, $redirect: String) {
+    requestLogin(email: $email, redirect: $redirect) 
   }
 `;
 

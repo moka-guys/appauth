@@ -7,13 +7,13 @@ const { sendLoginToken, checkLoginToken, sendApprovalTokens, checkApprovalToken 
 const { SECRET_KEY, TOKEN_VALIDITY, REDIRECT_URL } = require('../config');
 const User = require('../models/User');
 
-function generateToken(user) {
+function generateToken(user, redirect) {
   return jwt.sign(
     {
       id: user.id,
       email: user.email,
       name: user.name,
-      redirect: REDIRECT_URL,
+      redirect: redirect || REDIRECT_URL,
     },
     SECRET_KEY,
     { expiresIn: TOKEN_VALIDITY }
@@ -61,12 +61,14 @@ module.exports = {
         throw new UserInputError('Token expired. A new one has been sent to your email.');
       }
       
+      // get redirect url from login request
+      const redirect = user.login_token.redirect;
       // invalidate login token
       user.login_token = null;
       await user.save();
       
       // generate JWT token
-      const jwtoken = generateToken(user);
+      const jwtoken = generateToken(user, redirect);
 
       // return token with user
       return {
@@ -75,7 +77,7 @@ module.exports = {
         token: jwtoken
       };
     },
-    async requestLogin(_, { email }) {
+    async requestLogin(_, { email, redirect }) {
       // validate email
       const validation = validateEmailDomain(email);
       if (!validation.valid) throw new UserInputError(Object.values(validation.errors)[0]);
@@ -112,7 +114,7 @@ module.exports = {
           const validMinutes = Math.floor((user.login_token.expires - Date.now()) / (1000*60));
           throw new UserInputError(`Check your email or wait ${validMinutes} minutes before requesting a new login.`);
         } else {
-          sendLoginToken(user);
+          sendLoginToken(user, redirect);
         }
       } else {
         throw new UserInputError('You have not been granted access to this app.');
