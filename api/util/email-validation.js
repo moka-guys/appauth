@@ -14,6 +14,8 @@ const createMailer = (url) => {
       port: smtp.port,
       secure: false,
       tls: {
+        maxVersion: 'TLSv1.3',
+        minVersion: 'TLSv1',
         rejectUnauthorized: false
       }
     });
@@ -69,7 +71,7 @@ module.exports.sendApprovalTokens = async (user) => {
         html: `<h5>AppAuth</h5>
         <p>A new user requested access approval. Click on the corresponding link to deny or approve the request:</p>
         ${adminTokens.map((t,i) => {
-          const tokenlink = `${ROOT_URL}/approve?token=${t}`;
+          const tokenlink = `${ROOT_URL.replace(/\/$/,'')}/approve?token=${t}`;
           return `<a href="${tokenlink}">${LEVELS[i]}</a><br/>`;
         })}
         <p>If you are not an admin, please ignore this email.</p>
@@ -96,15 +98,16 @@ module.exports.sendApprovalTokens = async (user) => {
 };
 
 // send login token (not readable)
-module.exports.sendLoginToken = async (user) => {
+module.exports.sendLoginToken = async (user,redirect) => {
   user.login_token = {
     token: crypto.randomBytes(16).toString("hex"),
     expires: Date.now() + (60 * 60 * 1000), // login valid for one hour
+    redirect,
   }
   await user.save();
   
   // send email
-  const tokenlink = `${ROOT_URL}/login?token=${user.login_token.token}`;
+  const tokenlink = `${ROOT_URL.replace(/\/$/,'')}/login?token=${user.login_token.token}`;
   const mailOptions = {
     from: MAILER_FROM, // sender address
     to: user.email, // receiver
@@ -134,7 +137,7 @@ module.exports.checkApprovalToken = async (token) => {
   user.approval_tokens = null;
 
   // notify user
-  const loginlink = `${ROOT_URL}/login`;
+  const loginlink = `${ROOT_URL.replace(/\/$/,'')}/login`;
   const mailOptions = {
     from: MAILER_FROM, // sender address
     to: user.email,

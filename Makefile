@@ -2,6 +2,7 @@ BUILD   := $(shell git log -1 --pretty=%h)
 
 # define image names
 APP      := appauth
+NGX      := nginx
 REGISTRY := seglh
 
 # build tags

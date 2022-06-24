@@ -9,12 +9,12 @@ services:
       - mongodb
       - mailtrap
     ports:
-      - "5555:5555"
+      - "5050:5050"
     environment:
       NODE_ENV: production
       HTTP_FORWARDED_COUNT: 1
-      APP_PORT: 5555
-      ROOT_URL: http://127.0.0.1:5555/appauth/
+      APP_PORT: 5050
+      ROOT_URL: http://127.0.0.1:5050/appauth/
       MAILER_URL: smtp://mailtrap:25
       MAILER_FROM: dbrawand@nhs.net
       SECRET_KEY: verysecretjwtauthkey

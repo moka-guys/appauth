@@ -12,7 +12,8 @@ const userSchema = new Schema({
   },
   login_token: {
     token: String,
-    expires: Number
+    expires: Number,
+    redirect: String // optional redirect URL
   },
 }, {
   timestamps: true
